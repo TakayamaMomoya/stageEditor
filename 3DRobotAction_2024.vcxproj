@@ -158,6 +158,8 @@
     <ClCompile Include="code\anim3D.cpp" />
     <ClCompile Include="code\animation2D.cpp" />
     <ClCompile Include="code\animEffect3D.cpp" />
+    <ClCompile Include="code\backends\imgui_impl_dx9.cpp" />
+    <ClCompile Include="code\backends\imgui_impl_win32.cpp" />
     <ClCompile Include="code\beam.cpp" />
     <ClCompile Include="code\billboard.cpp" />
     <ClCompile Include="code\block.cpp" />
@@ -180,6 +182,11 @@
     <ClCompile Include="code\fan2D.cpp" />
     <ClCompile Include="code\fan3D.cpp" />
     <ClCompile Include="code\game.cpp" />
+    <ClCompile Include="code\imgui.cpp" />
+    <ClCompile Include="code\imgui_demo.cpp" />
+    <ClCompile Include="code\imgui_draw.cpp" />
+    <ClCompile Include="code\imgui_tables.cpp" />
+    <ClCompile Include="code\imgui_widgets.cpp" />
     <ClCompile Include="code\inpact.cpp" />
     <ClCompile Include="code\input.cpp" />
     <ClCompile Include="code\inputjoypad.cpp" />
@@ -221,6 +228,10 @@
     <ClInclude Include="code\anim3D.h" />
     <ClInclude Include="code\animation2D.h" />
     <ClInclude Include="code\animEffect3D.h" />
+    <ClInclude Include="code\backends\imgui_impl_dx9.h" />
+    <ClInclude Include="code\backends\imgui_impl_metal.h" />
+    <ClInclude Include="code\backends\imgui_impl_osx.h" />
+    <ClInclude Include="code\backends\imgui_impl_win32.h" />
     <ClInclude Include="code\beam.h" />
     <ClInclude Include="code\billboard.h" />
     <ClInclude Include="code\block.h" />
@@ -243,6 +254,12 @@
     <ClInclude Include="code\fan2D.h" />
     <ClInclude Include="code\fan3D.h" />
     <ClInclude Include="code\game.h" />
+    <ClInclude Include="code\imconfig.h" />
+    <ClInclude Include="code\imgui.h" />
+    <ClInclude Include="code\imgui_internal.h" />
+    <ClInclude Include="code\imstb_rectpack.h" />
+    <ClInclude Include="code\imstb_textedit.h" />
+    <ClInclude Include="code\imstb_truetype.h" />
     <ClInclude Include="code\inpact.h" />
     <ClInclude Include="code\input.h" />
     <ClInclude Include="code\inputjoypad.h" />
@@ -279,6 +296,10 @@
     <ClInclude Include="code\UI.h" />
     <ClInclude Include="code\UIManager.h" />
     <ClInclude Include="code\universal.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="code\backends\imgui_impl_metal.mm" />
+    <None Include="code\backends\imgui_impl_osx.mm" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
