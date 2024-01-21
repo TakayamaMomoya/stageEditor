@@ -241,6 +241,10 @@ void CRenderer::Draw(void)
 
 		CDebugProc::GetInstance()->Draw();
 
+		// imgui•`‰æ
+		ImGui::Render();
+		ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+
 		// •`‰æI—¹
 		m_pD3DDevice->EndScene();
 	}

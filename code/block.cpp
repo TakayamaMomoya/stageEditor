@@ -69,34 +69,19 @@ CBlock::~CBlock()
 //=====================================================
 // 生成処理
 //=====================================================
-CBlock *CBlock::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, TYPE type)
+CBlock *CBlock::Create(int nIdxModel)
 {
 	CBlock *pBlock = nullptr;
-
-	if (type <= CBlock::TYPE_NONE && type >= CBlock::TYPE_MAX)
-	{// 範囲外の種類が渡されたらnullptrを返す
-		return nullptr;
-	}
 
 	if (pBlock == nullptr)
 	{// インスタンス生成
 		pBlock = new CBlock;
 
-		pBlock->SetPosition(pos);
-		pBlock->SetRot(rot);
-
 		// 初期化処理
-		pBlock->m_type = type;
 		pBlock->Init();
 
 		// 種類ごとのモデル読込
-		pBlock->SetIdxModel(m_pIdxObject[type]);
-		pBlock->BindModel(m_pIdxObject[type]);
-
-		if (rot.y != 0)
-		{// 角度によって最大頂点、最小頂点を変える処理
-			pBlock->SwapVtx();
-		}
+		pBlock->BindModel(nIdxModel);
 
 		if (pBlock->m_pCollisionCube == nullptr)
 		{// 当たり判定生成
@@ -212,6 +197,19 @@ void CBlock::Hit(float fDamage)
 //=====================================================
 // 頂点を入れ替える処理
 //=====================================================
+void CBlock::SetRot(D3DXVECTOR3 rot)
+{
+	if (rot.y != 0)
+	{// 角度によって最大頂点、最小頂点を変える処理
+		SwapVtx();
+	}
+
+	CObjectX::SetRot(rot);
+}
+
+//=====================================================
+// 頂点を入れ替える処理
+//=====================================================
 void CBlock::SwapVtx(void)
 {
 	D3DXVECTOR3 vtxMax = GetVtxMax();
@@ -286,38 +284,6 @@ void CBlock::DeleteIdx(void)
 //=====================================================
 HRESULT CBlock::Load(char *pPath)
 {
-	int nNumBlock;
-	MemBlock memBlock;
-
-	//ポインタ宣言
-	FILE *pFile;
-
-	//ファイルを開く
-	pFile = fopen(pPath, "rb");
-
-	if (pFile != nullptr)
-	{//ファイルが開けた場合
-		
-		// 数の読込
-		fread(&nNumBlock, sizeof(int), 1, pFile);
-
-		for (int nCntBlock = 0;nCntBlock < nNumBlock;nCntBlock++)
-		{
-			// ブロックの読込
-			fread(&memBlock, sizeof(MemBlock), 1, pFile);
-
-			// ブロックの生成
-			Create(memBlock.pos, memBlock.rot,memBlock.type);
-		}
-
-		//ファイルを閉じる
-		fclose(pFile);
-	}
-	else
-	{//ファイルが開けなかった場合
-		assert(("ブロック配置データ読み込みに失敗", false));
-	}
-
 	return S_OK;
 }
 

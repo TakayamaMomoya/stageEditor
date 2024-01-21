@@ -32,6 +32,7 @@
 #include "player.h"
 #include "slow.h"
 #include "checkPointManager.h"
+#include "blockManager.h"
 
 //*****************************************************
 // マクロ定義
@@ -100,7 +101,7 @@ HRESULT CGame::Init(void)
 
 #ifdef _DEBUG
 	// エディットの生成
-	//CEdit::Create();
+	CEdit::Create();
 #endif
 
 	// フォグをかける
@@ -119,6 +120,9 @@ HRESULT CGame::Init(void)
 
 	// チェックポイント管理の生成
 	CCheckPointManager::Create();
+
+	// ブロック管理の生成
+	CBlockManager::Create();
 
 	return S_OK;
 }

@@ -243,6 +243,9 @@
     <ClCompile Include="code\imgui_widgets.cpp">
       <Filter>ソース ファイル\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="code\blockManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\block.h">
@@ -457,6 +460,9 @@
     </ClInclude>
     <ClInclude Include="code\imstb_truetype.h">
       <Filter>ソース ファイル\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="code\blockManager.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

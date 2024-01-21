@@ -173,7 +173,7 @@ void CEdit::Update(void)
 
 		if (pKeyboard->GetTrigger(DIK_RETURN) || pMouse->GetTrigger(CInputMouse::BUTTON_LMB))
 		{// ブロックの生成
-			CBlock::Create(m_pObjectCursor->GetPosition(), m_pObjectCursor->GetRot(),m_type);
+			//CBlock::Create(m_pObjectCursor->GetPosition(), m_pObjectCursor->GetRot(),m_type);
 		}
 
 		// 削除ブロック選択

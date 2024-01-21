@@ -37,12 +37,13 @@ public:
 	CBlock(int nPriority = 3);	// コンストラクタ
 	~CBlock();	// デストラクタ
 
-	static CBlock *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot,TYPE type);
+	static CBlock *Create(int nIdxModel);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
 	void Hit(float fDamage);
+	void SetRot(D3DXVECTOR3 rot);
 	int GetID(void) { return m_nID; }
 	static HRESULT Load(char *pPath);	// 読込
 	static void Save(void);	// 保存

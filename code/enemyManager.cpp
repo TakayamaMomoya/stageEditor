@@ -16,7 +16,7 @@
 #include "inputkeyboard.h"
 #include "effect3D.h"
 #include "player.h"
-#include "object2D.h"
+#include "UI.h"
 #include "texture.h"
 
 //*****************************************************
@@ -131,7 +131,7 @@ HRESULT CEnemyManager::Init(void)
 
 	if (m_pCursor == nullptr)
 	{// ÉJÅ[É\Éãê∂ê¨
-		m_pCursor = CObject2D::Create(7);
+		m_pCursor = CUI::Create();
 
 		if (m_pCursor != nullptr)
 		{
