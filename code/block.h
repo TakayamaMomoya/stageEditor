@@ -54,13 +54,10 @@ public:
 	static float CheckShadow(D3DXVECTOR3 pos);
 	static void LoadModel(void);
 	static void DeleteIdx(void);
-	static int *GetIndex(void) { return m_pIdxObject; }
 
 private:
 	void SwapVtx(void);
 
-	TYPE m_type;
-	static int *m_pIdxObject;	// モデルのタイプ番号のポインタ
 	static CBlock *m_apBlock[NUM_OBJECT];	// ブロックの配列
 	static int m_nNumAll;	// 総数
 	CCollisionCube *m_pCollisionCube;	// 立方体の当たり判定

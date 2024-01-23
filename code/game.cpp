@@ -99,6 +99,9 @@ HRESULT CGame::Init(void)
 		//pSound->Play(pSound->LABEL_BGM_GAME);
 	}
 
+	// ブロック管理の生成
+	CBlockManager::Create();
+
 #ifdef _DEBUG
 	// エディットの生成
 	CEdit::Create();
@@ -120,9 +123,6 @@ HRESULT CGame::Init(void)
 
 	// チェックポイント管理の生成
 	CCheckPointManager::Create();
-
-	// ブロック管理の生成
-	CBlockManager::Create();
 
 	return S_OK;
 }

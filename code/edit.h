@@ -41,8 +41,11 @@ private:
 		MODE_MAX
 	};
 
+	void LoopCursor(void);
+	void CreateBlock(D3DXVECTOR3 pos);
 	int CheckDelete(void);
 
+	D3DXVECTOR3 m_pos;	// 位置
 	MODE m_mode;	// モード
 	CObjectX *m_pObjectCursor;	// カーソルのオブジェクトXへのポインタ
 	int m_nIdxObject;

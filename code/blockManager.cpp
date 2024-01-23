@@ -108,11 +108,37 @@ void CBlockManager::Load(void)
 					//ï∂éöì«Ç›çûÇ›
 					(void)fscanf(pFile, "%s", &cTemp[0]);
 
-					if (strcmp(cTemp, "Tag") == 0)
+					if (strcmp(cTemp, "TAG") == 0)
 					{
 						(void)fscanf(pFile, "%s", &cTemp[0]);
 
-						(void)fscanf(pFile, "%s", m_pInfoBlock[nCntBlock].pTag);
+						(void)fscanf(pFile, "%s", &m_pInfoBlock[nCntBlock].aTag[0]);
+					}
+
+					if (strcmp(cTemp, "MODEL") == 0)
+					{
+						(void)fscanf(pFile, "%s", &cTemp[0]);
+						(void)fscanf(pFile, "%s", &cTemp[0]);
+
+						m_pInfoBlock[nCntBlock].nIdxModel = CModel::Load(&cTemp[0]);
+					}
+
+					if (strcmp(cTemp, "SNAG") == 0)
+					{
+						int nBool;
+
+						(void)fscanf(pFile, "%s", &cTemp[0]);
+
+						(void)fscanf(pFile, "%d", &nBool);
+
+						if (nBool == 1)
+						{
+							m_pInfoBlock[nCntBlock].bSnag = true;
+						}
+						else
+						{
+							m_pInfoBlock[nCntBlock].bSnag = false;
+						}
 					}
 
 					if (strcmp(cTemp, "END_INFOBLOCK") == 0)

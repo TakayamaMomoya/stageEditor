@@ -31,14 +31,12 @@ namespace
 //*****************************************************
 CBlock *CBlock::m_apBlock[NUM_OBJECT] = {};	// ブロックの配列
 int CBlock::m_nNumAll = 0;	// 総数
-int *CBlock::m_pIdxObject = nullptr;	// 番号のポインタ
 
 //=====================================================
 // コンストラクタ
 //=====================================================
 CBlock::CBlock(int nPriority)
 {
-	m_type = TYPE_WALL;
 	m_pCollisionCube = nullptr;
 	m_fLife = 0.0f;
 	m_nID = -1;
@@ -272,11 +270,7 @@ void CBlock::DeleteAll(void)
 //=====================================================
 void CBlock::DeleteIdx(void)
 {
-	if (m_pIdxObject != nullptr)
-	{// 番号ポインタの破棄
-		delete m_pIdxObject;
-		m_pIdxObject = nullptr;
-	}
+
 }
 
 //=====================================================
@@ -333,19 +327,6 @@ void CBlock::LoadModel(void)
 		"data\\MODEL\\BLOCK\\concrete_00.x",	// コンクリート壁
 	};
 
-	if (m_pIdxObject == nullptr)
-	{
-		// 番号の生成
-		m_pIdxObject = new int[CBlock::TYPE_MAX];
-
-		// 値の初期化
-		ZeroMemory(m_pIdxObject,sizeof(int) * CBlock::TYPE_MAX);
-
-		for (int nCntBlock = 0; nCntBlock < CBlock::TYPE_MAX; nCntBlock++)
-		{
-			m_pIdxObject[nCntBlock] = CModel::Load(pPath[nCntBlock]);
-		}
-	}
 }
 
 //=====================================================
@@ -372,7 +353,6 @@ void CBlock::Save(void)
 			{
 				memBlock.pos = m_apBlock[nCntBlock]->GetPosition();
 				memBlock.rot = m_apBlock[nCntBlock]->GetRot();
-				memBlock.type = m_apBlock[nCntBlock]->m_type;
 
 				//バイナリファイルに書き込む
 				fwrite(&memBlock, sizeof(MemBlock), 1, pFile);
