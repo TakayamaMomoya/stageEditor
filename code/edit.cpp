@@ -123,25 +123,47 @@ void CEdit::Update(void)
 	// 情報取得
 	CInputKeyboard *pKeyboard = CInputKeyboard::GetInstance();
 	CInputMouse* pMouse = CInputMouse::GetInstance();
+	CBlockManager *pBlockManager = CBlockManager::GetInstance();
 
 	D3DXVECTOR3 rot = { 0.0f,0.0f,0.0f };
 	float fSpeed = SPEED_MOVE;
-	CBlock **pBlock = CBlock::GetBlock();
 
 	// カーソルのループ
 	LoopCursor();
 
-	if (m_pObjectCursor != nullptr && pKeyboard != nullptr && pMouse != nullptr)
+	if (m_pObjectCursor != nullptr && pKeyboard != nullptr && pMouse != nullptr && pBlockManager != nullptr)
 	{
 		// ブロック移動
 		ImGui::DragFloat("POS.X", &m_pos.x, SPEED_MOVE, -FLT_MAX, FLT_MAX);
 		ImGui::DragFloat("POS.Y", &m_pos.y, SPEED_MOVE, -FLT_MAX, FLT_MAX);
 		ImGui::DragFloat("POS.Z", &m_pos.z, SPEED_MOVE, -FLT_MAX, FLT_MAX);
 
-		// ブロック生成
+		int nNumBlock = pBlockManager->GetNumBlock();
+		CBlockManager::SInfoBlock *pInfoBlock = pBlockManager->GetInfoBlock();
+		
+		for (int i = 0;i < nNumBlock;i++)
+		{// ブロック選択
+			if (ImGui::Button(&pInfoBlock[i].aTag[0], ImVec2(50.0f, 20.0f)))
+			{
+				m_nIdxObject = i;
+
+				m_pObjectCursor->BindModel(pInfoBlock[i].nIdxModel);
+			}
+		}
+
 		if (ImGui::Button("Create", ImVec2(50.0f, 20.0f)))
-		{
+		{// ブロック生成
 			CreateBlock(m_pObjectCursor->GetPosition());
+		}
+		
+		if (ImGui::Button("Save", ImVec2(50.0f, 20.0f)))
+		{// 保存
+			CBlockManager *pBlockManager = CBlockManager::GetInstance();
+
+			if (pBlockManager != nullptr)
+			{
+				pBlockManager->Save("data\\map.txt");
+			}
 		}
 
 		// 回転
@@ -159,16 +181,11 @@ void CEdit::Update(void)
 		}
 
 		// 削除ブロック選択
-		int nIdxDelete = CheckDelete();
+		CBlock *pBlock = CheckDelete();
 
-		if (pKeyboard->GetTrigger(DIK_BACKSPACE) && nIdxDelete != -1)
+		if (pKeyboard->GetTrigger(DIK_BACKSPACE) && pBlock != nullptr)
 		{
-			CBlock::Delete(nIdxDelete);
-		}
-
-		if (pKeyboard->GetTrigger(DIK_F2))
-		{// ブロックの保存
-			CBlock::Save();
+			pBlock->Uninit();
 		}
 
 		if (m_pObjectCursor != nullptr)
@@ -226,19 +243,20 @@ void CEdit::CreateBlock(D3DXVECTOR3 pos)
 //=====================================================
 // 削除ブロックのチェック
 //=====================================================
-int CEdit::CheckDelete(void)
+CBlock *CEdit::CheckDelete(void)
 {
-	CBlock** ppBlock = CBlock::GetBlock();
-	int nNumBlock = CBlock::GetNumAll();
+	CBlockManager *pBlockManager = CBlockManager::GetInstance();
 
-	if (ppBlock == nullptr)
+	if (pBlockManager == nullptr)
 	{
-		return -1;
+		return nullptr;
 	}
 
-	for (int i = 0; i < nNumBlock; i++)
+	CBlock *pBlock = pBlockManager->GetHead();
+
+	while (pBlock != nullptr)
 	{
-		CBlock* pBlock = ppBlock[i];
+		CBlock *pBlockNext = pBlock->GetNext();
 
 		if (pBlock != nullptr)
 		{
@@ -249,7 +267,7 @@ int CEdit::CheckDelete(void)
 			D3DXVECTOR3 vtxMax = pBlock->GetVtxMax();
 			D3DXVECTOR3 vtxMin = pBlock->GetVtxMin();
 
-			if (pos.x >= posBlock.x + vtxMin.x && 
+			if (pos.x >= posBlock.x + vtxMin.x &&
 				pos.x <= posBlock.x + vtxMax.x &&
 				pos.z >= posBlock.z + vtxMin.z &&
 				pos.z <= posBlock.z + vtxMax.z &&
@@ -258,10 +276,12 @@ int CEdit::CheckDelete(void)
 			{// ブロック内にいるとき
 				pBlock->SetEmissiveCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 
-				return i;
+				return pBlock;
 			}
 		}
+
+		pBlock = pBlockNext;
 	}
 
-	return -1;
+	return nullptr;
 }

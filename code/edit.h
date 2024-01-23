@@ -43,7 +43,7 @@ private:
 
 	void LoopCursor(void);
 	void CreateBlock(D3DXVECTOR3 pos);
-	int CheckDelete(void);
+	CBlock *CheckDelete(void);
 
 	D3DXVECTOR3 m_pos;	// à íu
 	MODE m_mode;	// ÉÇÅ[Éh

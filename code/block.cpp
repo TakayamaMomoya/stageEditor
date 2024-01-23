@@ -10,6 +10,7 @@
 //*****************************************************
 #include "main.h"
 #include "block.h"
+#include "blockManager.h"
 #include "renderer.h"
 #include "manager.h"
 #include "object.h"
@@ -29,7 +30,6 @@ namespace
 //*****************************************************
 // 静的メンバ変数宣言
 //*****************************************************
-CBlock *CBlock::m_apBlock[NUM_OBJECT] = {};	// ブロックの配列
 int CBlock::m_nNumAll = 0;	// 総数
 
 //=====================================================
@@ -39,18 +39,40 @@ CBlock::CBlock(int nPriority)
 {
 	m_pCollisionCube = nullptr;
 	m_fLife = 0.0f;
-	m_nID = -1;
 
-	for (int nCntBlock = 0;nCntBlock < NUM_OBJECT;nCntBlock++)
+	// 先頭、最後尾アドレス取得
+	CBlockManager *pManager = CBlockManager::GetInstance();
+	CBlock *pHead = nullptr;
+	CBlock *pTail = nullptr;
+
+	if (pManager != nullptr)
 	{
-		if (m_apBlock[nCntBlock] == nullptr)
-		{// 保存用配列にコピー
-			m_apBlock[nCntBlock] = this;
+		pHead = pManager->GetHead();
+		pTail = pManager->GetTail();
+	}
 
-			m_nID = nCntBlock;
+	// 値のクリア
+	m_pPrev = nullptr;
+	m_pNext = nullptr;
 
-			break;
-		}
+	if (pHead == nullptr)
+	{// 先頭と最後尾アドレスの代入
+		pManager->SetHead(this);
+		pManager->SetTail(this);
+
+		return;
+	}
+
+	// 前のアドレスに最後尾のアドレスを代入する
+	m_pPrev = pTail;
+
+	// 最後尾のアドレスを自分にする
+	pManager->SetTail(this);
+
+	if (m_pPrev != nullptr)
+	{
+		// 前のオブジェクトの次のアドレスを自分にする
+		m_pPrev->m_pNext = this;
 	}
 
 	m_nNumAll++;
@@ -61,6 +83,57 @@ CBlock::CBlock(int nPriority)
 //=====================================================
 CBlock::~CBlock()
 {
+	// 先頭、最後尾アドレス取得
+	CBlockManager *pManager = CBlockManager::GetInstance();
+	CBlock *pHead = nullptr;
+	CBlock *pTail = nullptr;
+
+	if (pManager != nullptr)
+	{
+		pHead = pManager->GetHead();
+		pTail = pManager->GetTail();
+	}
+
+	m_nNumAll--;
+
+	if (pTail != this && pHead != this)
+	{// 真ん中のアドレスの破棄
+		if (m_pPrev != nullptr)
+		{
+			// 前のアドレスから次のアドレスをつなぐ
+			m_pPrev->m_pNext = m_pNext;
+		}
+
+		if (m_pNext != nullptr)
+		{
+			// 次のアドレスから前のアドレスをつなぐ
+			m_pNext->m_pPrev = m_pPrev;
+		}
+	}
+
+	if (pHead == this)
+	{// 先頭アドレスの破棄
+		//if (m_pNext != nullptr)
+		{// 先頭アドレスを次のアドレスに引き継ぐ
+			pManager->SetHead(m_pNext);
+
+			if (m_pNext != nullptr)
+			{
+				m_pNext->m_pPrev = nullptr;
+			}
+		}
+	}
+
+	if (pTail == this)
+	{// 最後尾アドレスの破棄
+		if (m_pPrev != nullptr)
+		{// 最後尾アドレスを前のアドレスに引き継ぐ
+			pManager->SetTail(m_pPrev);
+
+			m_pPrev->m_pNext = nullptr;
+		}
+	}
+
 	m_nNumAll--;
 }
 
@@ -167,7 +240,6 @@ void CBlock::Hit(float fDamage)
 
 	if (m_fLife <= 0.0f)
 	{// 破壊判定
-		Delete(m_nID);
 
 		float fRotY = (rand() % 628 - 314) / 100.0f;
 		
@@ -189,6 +261,8 @@ void CBlock::Hit(float fDamage)
 
 		// 破片の生成
 		CDebrisSpawner::Create(D3DXVECTOR3(GetPosition().x, GetPosition().y + 50.0f, GetPosition().z), CDebrisSpawner::TYPE::TYPE_WALL, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+		Uninit();
 	}
 }
 
@@ -219,151 +293,4 @@ void CBlock::SwapVtx(void)
 
 	SetVtxMax(vtxMax);
 	SetVtxMin(vtxMin);
-}
-
-//=====================================================
-// 部分削除
-//=====================================================
-void CBlock::Delete(int nIdx)
-{
-	CBlock *pBlockDelete = m_apBlock[nIdx];
-
-	// 配列を詰める
-	/*for (int nCntBlock = nIdx; nCntBlock < NUM_OBJECT - 1; nCntBlock++)
-	{
-		if (m_apBlock[nCntBlock + 1] != nullptr)
-		{
-			m_apBlock[nCntBlock] = m_apBlock[nCntBlock + 1];
-
-			m_apBlock[nCntBlock]->m_nID = nCntBlock;
-
-			m_apBlock[nCntBlock + 1] = nullptr;
-		}
-	}*/
-
-	if (pBlockDelete != nullptr)
-	{// 削除処理
-		pBlockDelete->Uninit();
-
-		pBlockDelete = nullptr;
-	}
-
-	m_apBlock[nIdx] = nullptr;
-}
-
-//=====================================================
-// 全削除処理
-//=====================================================
-void CBlock::DeleteAll(void)
-{
-	for (int nCntBlock = 0;nCntBlock < NUM_OBJECT;nCntBlock++)
-	{
-		if (m_apBlock[nCntBlock] != nullptr)
-		{
-			m_apBlock[nCntBlock] = nullptr;
-		}
-	}
-}
-
-//=====================================================
-// 番号削除処理
-//=====================================================
-void CBlock::DeleteIdx(void)
-{
-
-}
-
-//=====================================================
-// 読込処理
-//=====================================================
-HRESULT CBlock::Load(char *pPath)
-{
-	return S_OK;
-}
-
-//=====================================================
-// 影のチェック処理
-//=====================================================
-float CBlock::CheckShadow(D3DXVECTOR3 pos)
-{
-	float fHeight = -1000;
-
-	for (int i = 0; i < NUM_OBJECT; i++)
-	{
-		if (m_apBlock[i] != nullptr)
-		{
-			// ブロックの情報取得
-			D3DXVECTOR3 posBlock = m_apBlock[i]->GetPosition();
-			D3DXVECTOR3 vtxMax = m_apBlock[i]->GetVtxMax() + posBlock;
-			D3DXVECTOR3 vtxMin = m_apBlock[i]->GetVtxMin() + posBlock;
-
-			if (pos.x >= vtxMin.x && pos.x <= vtxMax.x &&
-				vtxMax.z >= pos.z && vtxMin.z <= pos.z)
-			{// 横以内にいるとき
-				if (pos.y >= posBlock.y)
-				{
-					float fDiff = vtxMax.y - pos.y;
-					float fDiffMax = fHeight - pos.y;
-
-					if (fDiff * fDiff < fDiffMax * fDiffMax)
-					{// 最小の差分より小さかったら
-						fHeight = vtxMax.y;
-					}
-				}
-			}
-		}
-	}
-
-	return fHeight;
-}
-
-//=====================================================
-// モデル番号読込処理
-//=====================================================
-void CBlock::LoadModel(void)
-{
-	char *pPath[CBlock::TYPE_MAX] =
-	{
-		"data\\MODEL\\BLOCK\\concrete_00.x",	// コンクリート壁
-	};
-
-}
-
-//=====================================================
-// 保存処理
-//=====================================================
-void CBlock::Save(void)
-{
-	//ポインタ宣言
-	FILE *pFile;
-
-	// 情報受け取り用構造体
-	MemBlock memBlock;
-
-	//ファイルを開く
-	pFile = fopen(MAP_FILE, "wb");
-
-	if (pFile != nullptr)
-	{//ファイルが開けた場合
-		fwrite(&m_nNumAll, sizeof(int), 1, pFile);
-
-		for (int nCntBlock = 0; nCntBlock < m_nNumAll; nCntBlock++)
-		{
-			if (m_apBlock[nCntBlock] != nullptr)
-			{
-				memBlock.pos = m_apBlock[nCntBlock]->GetPosition();
-				memBlock.rot = m_apBlock[nCntBlock]->GetRot();
-
-				//バイナリファイルに書き込む
-				fwrite(&memBlock, sizeof(MemBlock), 1, pFile);
-			}
-		}
-
-		//ファイルを閉じる
-		fclose(pFile);
-	}
-	else
-	{//ファイルが開けなかった場合
-		assert(("ブロックデータの保存失敗", false));
-	}
 }

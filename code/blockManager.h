@@ -12,6 +12,7 @@
 // インクルード
 //*****************************************************
 #include "block.h"
+#include <stdio.h>
 
 //*****************************************************
 // 前方宣言
@@ -42,12 +43,21 @@ public:
 	void Draw(void);
 	int GetNumBlock(void) { return m_nNumInfoBlock; }
 	SInfoBlock *GetInfoBlock(void) { return m_pInfoBlock; }
+	void Save(char *pPath);
+	CBlock *GetHead(void) { return m_pHead; }
+	CBlock *GetTail(void) { return m_pTail; }
+	void SetHead(CBlock *pBlock) { m_pHead = pBlock; }
+	void SetTail(CBlock *pBlock) { m_pTail = pBlock; }
 
 private:
 	void Load(void);
+	void LoadMap(FILE *pFile,char *pTemp);
 
 	SInfoBlock *m_pInfoBlock;	// ブロック情報のポインタ
 	int m_nNumInfoBlock;	// ブロック情報の数
+
+	CBlock *m_pHead;	// 先頭のアドレス
+	CBlock *m_pTail;	// 最後尾のアドレス
 	static CBlockManager *m_pBlockManager;	// 自身のポインタ
 };
 

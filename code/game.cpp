@@ -135,9 +135,6 @@ void CGame::Uninit(void)
 	// オブジェクト全棄
 	CObject::ReleaseAll();
 
-	// ブロックの破棄
-	CBlock::DeleteAll();
-
 	m_pGame = nullptr;
 }
 

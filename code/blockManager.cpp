@@ -150,11 +150,119 @@ void CBlockManager::Load(void)
 				}
 			}
 
+			// ロード情報の読み込み
+			LoadMap(pFile, &cTemp[0]);
+
 			if (strcmp(cTemp, "END_SCRIPT") == 0)
 			{
 				break;
 			}
 		}
+	}
+}
+
+//=====================================================
+// マップ配置の読み込み
+//=====================================================
+void CBlockManager::LoadMap(FILE *pFile, char *pTemp)
+{
+	if (strcmp(pTemp, "SETBLOCK") == 0)
+	{
+		D3DXVECTOR3 pos;
+		D3DXVECTOR3 rot;
+		int nIdx;
+
+		while (true)
+		{
+			//文字読み込み
+			(void)fscanf(pFile, "%s", pTemp);
+
+			if (strcmp(pTemp, "IDX") == 0)
+			{// インデックス
+				(void)fscanf(pFile, "%s", pTemp);
+
+				(void)fscanf(pFile, "%d", &nIdx);
+			}
+
+			if (strcmp(pTemp, "POS") == 0)
+			{// 位置
+				(void)fscanf(pFile, "%s", pTemp);
+
+				(void)fscanf(pFile, "%f", &pos.x);
+				(void)fscanf(pFile, "%f", &pos.y);
+				(void)fscanf(pFile, "%f", &pos.z);
+			}
+
+			if (strcmp(pTemp, "ROT") == 0)
+			{// 向き
+				(void)fscanf(pFile, "%s", pTemp);
+
+				(void)fscanf(pFile, "%f", &rot.x);
+				(void)fscanf(pFile, "%f", &rot.y);
+				(void)fscanf(pFile, "%f", &rot.z);
+			}
+
+			if (strcmp(pTemp, "END_SETBLOCK") == 0)
+			{
+				// ブロック生成
+				CBlock *pBlock = CBlock::Create(m_pInfoBlock[nIdx].nIdxModel);
+
+				if (pBlock != nullptr)
+				{
+					pBlock->SetPosition(pos);
+					pBlock->SetRot(rot);
+				}
+
+				break;
+			}
+		}
+	}
+}
+
+//=====================================================
+// マップ情報保存
+//=====================================================
+void CBlockManager::Save(char *pPath)
+{
+	FILE *pFile = nullptr;
+
+	pFile = fopen(pPath, "w");
+
+	if (pFile != nullptr)
+	{
+		fprintf(pFile, "#====================================================================\n");
+		fprintf(pFile, "#\n");
+		fprintf(pFile, "# マップのブロック配置情報[map.txt]\n");
+		fprintf(pFile, "# Author：Momoya Takayama\n");
+		fprintf(pFile, "#\n");
+		fprintf(pFile, "#====================================================================\n");
+		fprintf(pFile, "SCRIPT\n\n");
+		fprintf(pFile, "#====================================================================\n");
+		fprintf(pFile, "# モデル数\n");
+		fprintf(pFile, "#====================================================================\n");
+		fprintf(pFile, "NUM_BLOCK = %d\n\n", m_nNumInfoBlock);
+
+		for (int i = 0;i < m_nNumInfoBlock;i++)
+		{
+			char *pPathBlock = CModel::GetPath(m_pInfoBlock[i].nIdxModel);
+
+			fprintf(pFile, "#%d番目のブロック\n", i);
+			fprintf(pFile, " TAG = %s\n", &m_pInfoBlock[i].aTag[0]);
+			fprintf(pFile, " MODEL = %s\n", pPathBlock);
+			fprintf(pFile, " SNAG = %d\n\n", m_pInfoBlock[i].bSnag);
+		}
+
+		fprintf(pFile, "#====================================================================\n");
+		fprintf(pFile, "# 配置情報\n");
+		fprintf(pFile, "#====================================================================\n");
+
+		CBlock::GetNumAll();
+
+
+
+		fprintf(pFile, "END_SCRIPT\n");
+
+		fclose(pFile);
 	}
 }
 

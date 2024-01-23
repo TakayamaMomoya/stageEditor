@@ -44,25 +44,18 @@ public:
 	void Draw(void);
 	void Hit(float fDamage);
 	void SetRot(D3DXVECTOR3 rot);
-	int GetID(void) { return m_nID; }
-	static HRESULT Load(char *pPath);	// 読込
-	static void Save(void);	// 保存
-	static void Delete(int nIdx);	// 部分削除処理
-	static void DeleteAll(void);	// 全削除処理
+	CBlock *GetNext(void) { return m_pNext; }
 	static int GetNumAll(void) { return m_nNumAll; }
-	static CBlock **GetBlock(void) { return &m_apBlock[0]; }
-	static float CheckShadow(D3DXVECTOR3 pos);
-	static void LoadModel(void);
-	static void DeleteIdx(void);
 
 private:
 	void SwapVtx(void);
 
-	static CBlock *m_apBlock[NUM_OBJECT];	// ブロックの配列
 	static int m_nNumAll;	// 総数
 	CCollisionCube *m_pCollisionCube;	// 立方体の当たり判定
 	float m_fLife;	// 体力
-	int m_nID;	// ID
+
+	CBlock *m_pPrev;	// 前のアドレス
+	CBlock *m_pNext;	// 次のアドレス
 };
 
 #endif
