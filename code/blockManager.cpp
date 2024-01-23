@@ -211,6 +211,7 @@ void CBlockManager::LoadMap(FILE *pFile, char *pTemp)
 				{
 					pBlock->SetPosition(pos);
 					pBlock->SetRot(rot);
+					pBlock->SetIdx(nIdx);
 				}
 
 				break;
@@ -256,8 +257,32 @@ void CBlockManager::Save(char *pPath)
 		fprintf(pFile, "# ”z’uî•ñ\n");
 		fprintf(pFile, "#====================================================================\n");
 
-		CBlock::GetNumAll();
+		int nCntBlock = 0;
 
+		CBlock *pBlock = GetHead();
+
+		while (pBlock != nullptr)
+		{
+			CBlock *pBlockNext = pBlock->GetNext();
+
+			if (pBlock != nullptr)
+			{
+				D3DXVECTOR3 pos = pBlock->GetPosition();
+				D3DXVECTOR3 rot = pBlock->GetRot();
+				int nIdx = pBlock->GetIdx();
+
+				fprintf(pFile, "SETBLOCK\n");
+
+				fprintf(pFile, " IDX = %d\n", nIdx);
+				fprintf(pFile, " POS = %.2f %.2f %.2f\n", pos.x, pos.y, pos.z);
+				fprintf(pFile, " ROT = %.2f %.2f %.2f\n", rot.x, rot.y, rot.z);
+
+				fprintf(pFile, "END_SETBLOCK\n");
+
+			}
+
+			pBlock = pBlockNext;
+		}
 
 
 		fprintf(pFile, "END_SCRIPT\n");

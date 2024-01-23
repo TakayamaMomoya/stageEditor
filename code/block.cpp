@@ -39,6 +39,9 @@ CBlock::CBlock(int nPriority)
 {
 	m_pCollisionCube = nullptr;
 	m_fLife = 0.0f;
+	m_pPrev = nullptr;
+	m_pNext = nullptr;
+	m_nIdx = -1;
 
 	// 先頭、最後尾アドレス取得
 	CBlockManager *pManager = CBlockManager::GetInstance();
@@ -50,10 +53,6 @@ CBlock::CBlock(int nPriority)
 		pHead = pManager->GetHead();
 		pTail = pManager->GetTail();
 	}
-
-	// 値のクリア
-	m_pPrev = nullptr;
-	m_pNext = nullptr;
 
 	if (pHead == nullptr)
 	{// 先頭と最後尾アドレスの代入

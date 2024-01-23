@@ -44,6 +44,8 @@ public:
 	void Draw(void);
 	void Hit(float fDamage);
 	void SetRot(D3DXVECTOR3 rot);
+	int GetIdx(void) { return m_nIdx; }
+	void SetIdx(int nIdx) { m_nIdx = nIdx; }
 	CBlock *GetNext(void) { return m_pNext; }
 	static int GetNumAll(void) { return m_nNumAll; }
 
@@ -53,6 +55,7 @@ private:
 	static int m_nNumAll;	// 総数
 	CCollisionCube *m_pCollisionCube;	// 立方体の当たり判定
 	float m_fLife;	// 体力
+	int m_nIdx;	// 種類のインデックス
 
 	CBlock *m_pPrev;	// 前のアドレス
 	CBlock *m_pNext;	// 次のアドレス
