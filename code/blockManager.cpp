@@ -216,6 +216,11 @@ void CBlockManager::LoadMap(FILE *pFile, char *pTemp)
 					pBlock->SetPosition(pos);
 					pBlock->SetRot(rot);
 					pBlock->SetIdx(nIdx);
+
+					if (m_pInfoBlock[nIdx].bSnag == false)
+					{
+						pBlock->DeleteCollision();
+					}
 				}
 
 				break;

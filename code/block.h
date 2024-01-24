@@ -49,6 +49,7 @@ public:
 	CBlock *GetNext(void) { return m_pNext; }
 	static int GetNumAll(void) { return m_nNumAll; }
 	void SetPosition(D3DXVECTOR3 pos);
+	void DeleteCollision(void);
 
 private:
 	void SwapVtx(void);

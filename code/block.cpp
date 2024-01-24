@@ -196,15 +196,24 @@ HRESULT CBlock::Init(void)
 //=====================================================
 void CBlock::Uninit(void)
 {
+	// 当たり判定削除
+	DeleteCollision();
+
+	// 継承クラスの終了
+	CObjectX::Uninit();
+}
+
+//=====================================================
+// 当たり判定の削除
+//=====================================================
+void CBlock::DeleteCollision(void)
+{
 	if (m_pCollisionCube != nullptr)
 	{// 当たり判定の消去
 		m_pCollisionCube->Uninit();
 
 		m_pCollisionCube = nullptr;
 	}
-
-	// 継承クラスの終了
-	CObjectX::Uninit();
 }
 
 //=====================================================

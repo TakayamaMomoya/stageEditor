@@ -9,7 +9,7 @@ SCRIPT
 #====================================================================
 # モデル数
 #====================================================================
-NUM_BLOCK = 4
+NUM_BLOCK = 5
 
 #0番目のブロック
 INFOBLOCK
@@ -37,6 +37,13 @@ INFOBLOCK
  TAG = bill01
  MODEL = data\\MODEL\\BLOCK\\bill01.x
  SNAG = 1
+END_INFOBLOCK
+
+#5番目のブロック
+INFOBLOCK
+ TAG = tree00
+ MODEL = data\\MODEL\\BLOCK\\tree00.x
+ SNAG = 0
 END_INFOBLOCK
 
 #====================================================================

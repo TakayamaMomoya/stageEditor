@@ -256,6 +256,11 @@ void CEdit::CreateBlock(D3DXVECTOR3 pos)
 	{
 		pBlock->SetPosition(pos);
 		pBlock->SetIdx(m_nIdxObject);
+
+		if (pInfoBlock[m_nIdxObject].bSnag == false)
+		{
+			pBlock->DeleteCollision();
+		}
 	}
 }
 
