@@ -301,7 +301,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\stageEditor\\data\\TEXTURE\\MATERIAL\\window00.jpg";
+    "data\\TEXTURE\\MATERIAL\\window00.jpg";
    }
   }
   Material {
@@ -310,7 +310,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\stageEditor\\data\\TEXTURE\\MATERIAL\\window00.jpg";
+    "data\\TEXTURE\\MATERIAL\\window00.jpg";
    }
   }
   Material {
@@ -319,7 +319,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\stageEditor\\data\\TEXTURE\\MATERIAL\\concrete.jpg";
+    "data\\TEXTURE\\MATERIAL\\concrete.jpg";
    }
   }
   Material {

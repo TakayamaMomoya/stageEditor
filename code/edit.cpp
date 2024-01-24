@@ -255,6 +255,7 @@ void CEdit::CreateBlock(D3DXVECTOR3 pos)
 	if (pBlock != nullptr)
 	{
 		pBlock->SetPosition(pos);
+		pBlock->SetRot(m_pObjectCursor->GetRot());
 		pBlock->SetIdx(m_nIdxObject);
 
 		if (pInfoBlock[m_nIdxObject].bSnag == false)

@@ -314,4 +314,9 @@ void CBlock::SwapVtx(void)
 
 	SetVtxMax(vtxMax);
 	SetVtxMin(vtxMin);
+
+	if (m_pCollisionCube != nullptr)
+	{
+		m_pCollisionCube->SetVtx(vtxMax, vtxMin);
+	}
 }
