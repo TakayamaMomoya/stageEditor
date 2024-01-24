@@ -23,7 +23,7 @@
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define SPEED_MOVE	(0.2f)	// 移動速度
+#define SPEED_MOVE	(1.0f)	// 移動速度
 #define SPEED_ROTATION	(0.01f)	// 回転
 
 //*****************************************************
@@ -41,6 +41,7 @@ CEdit::CEdit()
 	m_nIdxObject = 0;
 	m_type = CBlock::TYPE_WALL;
 	m_mode = MODE_CREATE_BLOCK;
+	ZeroMemory(&m_aPath[0], sizeof(m_aPath));
 }
 
 //=====================================================
@@ -141,20 +142,35 @@ void CEdit::Update(void)
 		int nNumBlock = pBlockManager->GetNumBlock();
 		CBlockManager::SInfoBlock *pInfoBlock = pBlockManager->GetInfoBlock();
 		
-		for (int i = 0;i < nNumBlock;i++)
-		{// ブロック選択
-			if (ImGui::Button(&pInfoBlock[i].aTag[0], ImVec2(50.0f, 20.0f)))
-			{
-				m_nIdxObject = i;
+		if (ImGui::TreeNode("SelectBlock"))
+		{
+			for (int i = 0; i < nNumBlock; i++)
+			{// ブロック選択
+				if (ImGui::Button(&pInfoBlock[i].aTag[0], ImVec2(50.0f, 20.0f)))
+				{
+					m_nIdxObject = i;
 
-				m_pObjectCursor->BindModel(pInfoBlock[i].nIdxModel);
+					m_pObjectCursor->BindModel(pInfoBlock[i].nIdxModel);
+				}
 			}
+
+			ImGui::TreePop();
 		}
 
 		if (ImGui::Button("Create", ImVec2(50.0f, 20.0f)))
 		{// ブロック生成
 			CreateBlock(m_pObjectCursor->GetPosition());
 		}
+
+		// 削除ブロック選択
+		CBlock *pBlock = CheckDelete();
+
+		if (ImGui::Button("Delete", ImVec2(60.0f, 20.0f)))
+		{// 削除
+			pBlock->Uninit();
+		}
+
+		ImGui::InputText("SavePath", &m_aPath[0], 256);
 		
 		if (ImGui::Button("Save", ImVec2(50.0f, 20.0f)))
 		{// 保存
@@ -162,7 +178,17 @@ void CEdit::Update(void)
 
 			if (pBlockManager != nullptr)
 			{
-				pBlockManager->Save("data\\map.txt");
+				pBlockManager->Save(&m_aPath[0]);
+			}
+		}
+
+		if (ImGui::Button("DeleteAll", ImVec2(80.0f, 20.0f)))
+		{// 全削除
+			CBlockManager *pBlockManager = CBlockManager::GetInstance();
+
+			if (pBlockManager != nullptr)
+			{
+				pBlockManager->DeleteAll();
 			}
 		}
 
@@ -178,14 +204,6 @@ void CEdit::Update(void)
 			rot.y = D3DX_PI * 0.5f;
 
 			m_pObjectCursor->SetRot(rot);
-		}
-
-		// 削除ブロック選択
-		CBlock *pBlock = CheckDelete();
-
-		if (pKeyboard->GetTrigger(DIK_BACKSPACE) && pBlock != nullptr)
-		{
-			pBlock->Uninit();
 		}
 
 		if (m_pObjectCursor != nullptr)
@@ -237,6 +255,7 @@ void CEdit::CreateBlock(D3DXVECTOR3 pos)
 	if (pBlock != nullptr)
 	{
 		pBlock->SetPosition(pos);
+		pBlock->SetIdx(m_nIdxObject);
 	}
 }
 

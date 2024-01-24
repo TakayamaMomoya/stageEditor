@@ -217,6 +217,19 @@ void CBlock::Update(void)
 }
 
 //=====================================================
+// à íuê›íË
+//=====================================================
+void CBlock::SetPosition(D3DXVECTOR3 pos)
+{
+	if (m_pCollisionCube != nullptr)
+	{
+		m_pCollisionCube->SetPosition(pos);
+	}
+
+	CObjectX::SetPosition(pos);
+}
+
+//=====================================================
 // ï`âÊèàóù
 //=====================================================
 void CBlock::Draw(void)

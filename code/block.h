@@ -48,6 +48,7 @@ public:
 	void SetIdx(int nIdx) { m_nIdx = nIdx; }
 	CBlock *GetNext(void) { return m_pNext; }
 	static int GetNumAll(void) { return m_nNumAll; }
+	void SetPosition(D3DXVECTOR3 pos);
 
 private:
 	void SwapVtx(void);

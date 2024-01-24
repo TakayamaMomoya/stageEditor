@@ -44,6 +44,7 @@ public:
 	int GetNumBlock(void) { return m_nNumInfoBlock; }
 	SInfoBlock *GetInfoBlock(void) { return m_pInfoBlock; }
 	void Save(char *pPath);
+	void DeleteAll(void);
 	CBlock *GetHead(void) { return m_pHead; }
 	CBlock *GetTail(void) { return m_pTail; }
 	void SetHead(CBlock *pBlock) { m_pHead = pBlock; }

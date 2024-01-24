@@ -80,10 +80,7 @@ HRESULT CGame::Init(void)
 	}
 
 	// スカイボックスの生成
-	CSkybox::Create();
-
-	// ブロックの読み込み
-	//CBlock::Load("data\\MAP\\map01.bin");
+	//CSkybox::Create();
 
 	// 敵マネージャーの生成
 	CEnemyManager *pEnemyManager = CEnemyManager::Create();
@@ -102,10 +99,8 @@ HRESULT CGame::Init(void)
 	// ブロック管理の生成
 	CBlockManager::Create();
 
-#ifdef _DEBUG
 	// エディットの生成
 	CEdit::Create();
-#endif
 
 	// フォグをかける
 	CRenderer *pRenderer = CRenderer::GetInstance();
@@ -190,9 +185,9 @@ void CGame::Update(void)
 	// 状態管理
 	ManageState();
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	Debug();
-#endif
+//#endif
 }
 
 //=====================================================

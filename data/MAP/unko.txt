@@ -9,7 +9,7 @@ SCRIPT
 #====================================================================
 # モデル数
 #====================================================================
-NUM_BLOCK = 2
+NUM_BLOCK = 6
 
 #0番目のブロック
  TAG = wall
@@ -20,6 +20,26 @@ NUM_BLOCK = 2
  TAG = body
  MODEL = data\\MODEL\\BLOCK\\01_body.x
  SNAG = 0
+
+#2番目のブロック
+ TAG = bill00
+ MODEL = data\\MODEL\\BLOCK\\bill00.x
+ SNAG = 1
+
+#3番目のブロック
+ TAG = bill01
+ MODEL = data\\MODEL\\BLOCK\\bill01.x
+ SNAG = 1
+
+#4番目のブロック
+ TAG = bill02
+ MODEL = data\\MODEL\\BLOCK\\bill02.x
+ SNAG = 1
+
+#5番目のブロック
+ TAG = tree
+ MODEL = data\\MODEL\\BLOCK\\tree00.x
+ SNAG = 1
 
 #====================================================================
 # 配置情報
@@ -32,11 +52,6 @@ END_SETBLOCK
 SETBLOCK
  IDX = 0
  POS = 21.00 0.00 559.00
- ROT = 0.00 0.00 0.00
-END_SETBLOCK
-SETBLOCK
- IDX = 0
- POS = 335.40 0.00 -666.60
  ROT = 0.00 0.00 0.00
 END_SETBLOCK
 END_SCRIPT

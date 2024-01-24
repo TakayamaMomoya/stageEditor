@@ -49,6 +49,7 @@ private:
 	MODE m_mode;	// モード
 	CObjectX *m_pObjectCursor;	// カーソルのオブジェクトXへのポインタ
 	int m_nIdxObject;
+	char m_aPath[256];
 	CBlock::TYPE m_type;
 	static CEdit *m_pEdit;	// 自身のポインタ
 };

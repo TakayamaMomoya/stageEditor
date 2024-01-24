@@ -1,36 +1,68 @@
 #====================================================================
 #
-# マップのブロック配置情報[map.txt]
-# Author：Momoya Takayama
+# �}�b�v�̃u���b�N�z�u���[map.txt]
+# Author�FMomoya Takayama
 #
 #====================================================================
 SCRIPT
 
 #====================================================================
-# 配置するモデルの種類
+# ���f����
 #====================================================================
-NUM_BLOCK = 2
+NUM_BLOCK = 4
 
-#1番目のブロック
+#0�Ԗڂ̃u���b�N
 INFOBLOCK
- TAG = wall
- MODEL = data\\MODEL\\BLOCK\\concrete_00.x
+ TAG = wall00
+ MODEL = data\\MODEL\\BLOCK\\wall00.x
  SNAG = 1
 END_INFOBLOCK
 
-#2番目のブロック
+#2�Ԗڂ̃u���b�N
 INFOBLOCK
- TAG = body
- MODEL = data\\MODEL\\BLOCK\\01_body.x
- SNAG = 0
+ TAG = wall01
+ MODEL = data\\MODEL\\BLOCK\\wall01.x
+ SNAG = 1
+END_INFOBLOCK
+
+#3�Ԗڂ̃u���b�N
+INFOBLOCK
+ TAG = bill00
+ MODEL = data\\MODEL\\BLOCK\\bill00.x
+ SNAG = 1
+END_INFOBLOCK
+
+#4�Ԗڂ̃u���b�N
+INFOBLOCK
+ TAG = bill01
+ MODEL = data\\MODEL\\BLOCK\\bill01.x
+ SNAG = 1
 END_INFOBLOCK
 
 #====================================================================
-# 配置情報
+# �z�u���
 #====================================================================
 SETBLOCK
  IDX = 0
  POS = 500.00 0.00 0.00
+ ROT = 0.00 0.00 0.00
+END_SETBLOCK
+
+SETBLOCK
+ IDX = 0
+ POS = 21.00 0.00 559.00
+ ROT = 0.00 0.00 0.00
+END_SETBLOCK
+
+SETBLOCK
+ IDX = 0
+ POS = 335.40 0.00 -666.60
+ ROT = 0.00 0.00 0.00
+END_SETBLOCK
+
+SETBLOCK
+ IDX = 0
+ POS = -450.00 0.00 0.00
  ROT = 0.00 0.00 0.00
 END_SETBLOCK
 

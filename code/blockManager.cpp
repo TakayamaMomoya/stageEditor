@@ -32,6 +32,8 @@ CBlockManager::CBlockManager()
 {
 	m_pInfoBlock = nullptr;
 	m_nNumInfoBlock = 0;
+	m_pHead = nullptr;
+	m_pTail = nullptr;
 }
 
 //=====================================================
@@ -158,6 +160,8 @@ void CBlockManager::Load(void)
 				break;
 			}
 		}
+
+		fclose(pFile);
 	}
 }
 
@@ -248,9 +252,11 @@ void CBlockManager::Save(char *pPath)
 			char *pPathBlock = CModel::GetPath(m_pInfoBlock[i].nIdxModel);
 
 			fprintf(pFile, "#%d番目のブロック\n", i);
+			fprintf(pFile, "INFOBLOCK\n");
 			fprintf(pFile, " TAG = %s\n", &m_pInfoBlock[i].aTag[0]);
 			fprintf(pFile, " MODEL = %s\n", pPathBlock);
-			fprintf(pFile, " SNAG = %d\n\n", m_pInfoBlock[i].bSnag);
+			fprintf(pFile, " SNAG = %d\n", m_pInfoBlock[i].bSnag);
+			fprintf(pFile, "END_INFOBLOCK\n\n");
 		}
 
 		fprintf(pFile, "#====================================================================\n");
@@ -277,7 +283,7 @@ void CBlockManager::Save(char *pPath)
 				fprintf(pFile, " POS = %.2f %.2f %.2f\n", pos.x, pos.y, pos.z);
 				fprintf(pFile, " ROT = %.2f %.2f %.2f\n", rot.x, rot.y, rot.z);
 
-				fprintf(pFile, "END_SETBLOCK\n");
+				fprintf(pFile, "END_SETBLOCK\n\n");
 
 			}
 
@@ -288,6 +294,26 @@ void CBlockManager::Save(char *pPath)
 		fprintf(pFile, "END_SCRIPT\n");
 
 		fclose(pFile);
+	}
+}
+
+//=====================================================
+// 全削除処理
+//=====================================================
+void CBlockManager::DeleteAll(void)
+{
+	CBlock *pBlock = GetHead();
+
+	while (pBlock != nullptr)
+	{
+		CBlock *pBlockNext = pBlock->GetNext();
+
+		if (pBlock != nullptr)
+		{
+			pBlock->Uninit();
+		}
+
+		pBlock = pBlockNext;
 	}
 }
 
