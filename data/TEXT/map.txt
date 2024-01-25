@@ -9,7 +9,7 @@ SCRIPT
 #====================================================================
 # モデル数
 #====================================================================
-NUM_BLOCK = 5
+NUM_BLOCK = 9
 
 #0番目のブロック
 INFOBLOCK
@@ -43,6 +43,34 @@ END_INFOBLOCK
 INFOBLOCK
  TAG = tree00
  MODEL = data\\MODEL\\BLOCK\\tree00.x
+ SNAG = 0
+END_INFOBLOCK
+
+#5番目のブロック
+INFOBLOCK
+ TAG = car00
+ MODEL = data\\MODEL\\BLOCK\\car00.x
+ SNAG = 0
+END_INFOBLOCK
+
+#6番目のブロック
+INFOBLOCK
+ TAG = car01
+ MODEL = data\\MODEL\\BLOCK\\car01.x
+ SNAG = 0
+END_INFOBLOCK
+
+#7番目のブロック
+INFOBLOCK
+ TAG = car02
+ MODEL = data\\MODEL\\BLOCK\\car02.x
+ SNAG = 0
+END_INFOBLOCK
+
+#8番目のブロック
+INFOBLOCK
+ TAG = road00
+ MODEL = data\\MODEL\\BLOCK\\road00.x
  SNAG = 0
 END_INFOBLOCK
 
