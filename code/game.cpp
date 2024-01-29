@@ -62,10 +62,7 @@ HRESULT CGame::Init(void)
 	m_pGame = this;
 
 	m_state = STATE_NORMAL;
-	m_bStop = false;
-
-	// UIマネージャーの追加
-	CUIManager::Create();
+	m_bStop = true;
 
 	// 床の生成
 	CObject3D *pObjectOut = CObject3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -80,44 +77,9 @@ HRESULT CGame::Init(void)
 	}
 
 	// スカイボックスの生成
-	//CSkybox::Create();
+	CSkybox::Create();
 
-	// 敵マネージャーの生成
-	CEnemyManager *pEnemyManager = CEnemyManager::Create();
-
-	// ３Dアニメーション管理の生成
-	CAnimEffect3D::Create();
-
-	// サウンドインスタンスの取得
-	CSound* pSound = CSound::GetInstance();
-
-	if (pSound != nullptr)
-	{
-		//pSound->Play(pSound->LABEL_BGM_GAME);
-	}
-
-	// ブロック管理の生成
-	CBlockManager::Create();
-
-	// エディットの生成
-	CEdit::Create();
-
-	// フォグをかける
-	CRenderer *pRenderer = CRenderer::GetInstance();
-
-	if (pRenderer != nullptr)
-	{
-		//pRenderer->EnableFog(true);
-	}
-
-	// プレイヤーの生成
-	CPlayer::Create();
-
-	// スロー管理の生成
-	CSlow::Create();
-
-	// チェックポイント管理の生成
-	CCheckPointManager::Create();
+	CObjectX::Create();
 
 	return S_OK;
 }

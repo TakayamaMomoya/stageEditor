@@ -268,6 +268,12 @@ void CObject3D::Draw(void)
 	//頂点バッファをデータストリームに設定
 	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_3D));
 
+	// シェーダー
+	IDirect3DVertexDeclaration9 *pDec = CRenderer::GetInstance()->GetDecVtxShader();
+	IDirect3DVertexShader9 *pVtxShader = CRenderer::GetInstance()->GetHandlerVtxShader();
+	pDevice->SetVertexDeclaration(pDec);
+	pDevice->SetVertexShader(pVtxShader);
+
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_3D);
 
@@ -280,6 +286,9 @@ void CObject3D::Draw(void)
 		// カリングを無効化
 		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	}
+
+	IDirect3DPixelShader9 *ShaderPx = CRenderer::GetInstance()->GetHandlerPxShader();
+	pDevice->SetPixelShader(ShaderPx);
 
 	// 描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,0,2);

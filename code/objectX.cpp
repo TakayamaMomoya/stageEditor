@@ -48,9 +48,9 @@ HRESULT CObjectX::Init(void)
 
 	m_fScale = 1.0f;
 
-	if (m_pModel != nullptr)
+	if (m_pModel == nullptr)
 	{
-		int nIdx = CModel::Load("data\\MODEL\\weapon\\minigun.x");
+		int nIdx = CModel::Load("data\\MODEL\\block\\bill00.x");
 
 		// モデル読込
 		BindModel(nIdx);
@@ -149,6 +149,16 @@ void CObjectX::Draw(void)
 			// テクスチャ設定
 			pDevice->SetTexture(0, pTexture);
 
+			//LPDIRECT3DVERTEXBUFFER9 vtxBuff;
+
+			//m_pModel->pMesh->GetVertexBuffer(&vtxBuff);
+
+			////頂点バッファをロックし、頂点情報へのポインタを取得
+			//vtxBuff->Lock(0, 0, (void**)&vtxBuff, 0);
+
+
+
+			//vtxBuff->Unlock();
 			// モデル（パーツ）描画
 			m_pModel->pMesh->DrawSubset(nCntMat);
 

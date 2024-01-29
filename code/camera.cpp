@@ -326,6 +326,12 @@ void CCamera::SetCamera(void)
 	//ビューマトリックス設定
 	pDevice->SetTransform(D3DTS_VIEW, &m_camera.mtxView);
 
+	// シェーダーに行列を転置して伝える
+	D3DXMATRIX mtx;
+	D3DXMatrixMultiply(&mtx, &m_camera.mtxView, &m_camera.mtxProjection);
+	D3DXMatrixTranspose(&mtx, &mtx);	// 行列転置
+	pDevice->SetVertexShaderConstantF(0, (float*)&mtx, 4);	// シェーダーに伝える
+
 #ifdef _DEBUG
 	CDebugProc::GetInstance()->Print("\n視点の位置：[%f,%f,%f]", m_camera.posV.x, m_camera.posV.y, m_camera.posV.z);
 	CDebugProc::GetInstance()->Print("\n視点の目標位置：[%f,%f,%f]", m_camera.posVDest.x, m_camera.posVDest.y, m_camera.posVDest.z);
