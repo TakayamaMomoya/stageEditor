@@ -46,6 +46,7 @@ private:
 	CBlock *CheckDelete(void);
 
 	D3DXVECTOR3 m_pos;	// 位置
+	D3DXVECTOR3 m_rot;	// 向き
 	MODE m_mode;	// モード
 	CObjectX *m_pObjectCursor;	// カーソルのオブジェクトXへのポインタ
 	int m_nIdxObject;
