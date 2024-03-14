@@ -156,7 +156,6 @@ void CObjectX::Draw(void)
 			{
 				pLambert->Begin();
 				pLambert->SetMatrix(&m_mtxWorld, &D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
-				pLambert->SetAmbient(5.2f);
 				pLambert->BeginPass();
 			}
 

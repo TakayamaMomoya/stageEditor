@@ -46,6 +46,7 @@ private:
 	D3DXHANDLE m_pAmbient;	// 環境光のハンドラ
 	D3DXMATRIX m_mtxView;	// ビューマトリックス
 	D3DXMATRIX m_mtxProj;	// プロジェクションマトリックス
+	D3DXVECTOR4 m_ambient;	// アンビエントの値
 	static CLambert *m_pLambert;	// 自身のポインタ
 };
 

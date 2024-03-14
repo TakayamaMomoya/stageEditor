@@ -26,6 +26,7 @@ CLambert::CLambert()
 	m_pAmbient = nullptr;
 	m_pLightDir = nullptr;
 	m_pWVP = nullptr;
+	m_ambient = { 1.0f,1.0f,1.0f,1.0f };
 }
 
 //=====================================================
@@ -89,6 +90,7 @@ HRESULT CLambert::Init(void)
 		m_pWVP = m_pEffect->GetParameterByName(NULL, "m_WVP");
 		m_pLightDir = m_pEffect->GetParameterByName(NULL, "m_LightDir");
 		m_pAmbient = m_pEffect->GetParameterByName(NULL, "m_Ambient");
+		SetAmbient(0.8f);
 
 		m_pEffect->SetTechnique(m_pTechnique);
 	}
@@ -158,6 +160,8 @@ void CLambert::BeginPass(void)
 //=====================================================
 void CLambert::SetAmbient(float fAmbient)
 {
+	m_ambient = { fAmbient ,fAmbient ,fAmbient ,1.0f };
+
 	if (m_pEffect)
 	{//シェーダーが使用できるとき
 		D3DXVECTOR4 ambient;
@@ -183,6 +187,8 @@ void CLambert::SetAmbient(float fAmbient)
 //=====================================================
 void CLambert::SetAmbient(D3DXVECTOR4* pAmbient)
 {
+	m_ambient = { pAmbient->x ,pAmbient->y ,pAmbient->z ,1.0f };
+
 	if (m_pEffect)
 	{//シェーダーが使用できるとき
 		D3DXVECTOR4 ambient;
