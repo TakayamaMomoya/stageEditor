@@ -13,6 +13,7 @@
 #include "objectX.h"
 #include "texture.h"
 #include "model.h"
+#include "lambert.h"
 
 //====================================================
 // コンストラクタ
@@ -149,18 +150,24 @@ void CObjectX::Draw(void)
 			// テクスチャ設定
 			pDevice->SetTexture(0, pTexture);
 
-			//LPDIRECT3DVERTEXBUFFER9 vtxBuff;
+			CLambert *pLambert = CLambert::GetInstance();
 
-			//m_pModel->pMesh->GetVertexBuffer(&vtxBuff);
+			if (pLambert != nullptr)
+			{
+				pLambert->Begin();
+				pLambert->SetMatrix(&m_mtxWorld, &D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
+				pLambert->SetAmbient(5.2f);
+				pLambert->BeginPass();
+			}
 
-			////頂点バッファをロックし、頂点情報へのポインタを取得
-			//vtxBuff->Lock(0, 0, (void**)&vtxBuff, 0);
-
-
-
-			//vtxBuff->Unlock();
 			// モデル（パーツ）描画
 			m_pModel->pMesh->DrawSubset(nCntMat);
+
+			if (pLambert != nullptr)
+			{
+				pLambert->End();
+				pLambert->EndPass();
+			}
 
 			// 色を戻す
 			pMat[nCntMat].MatD3D = matDef;

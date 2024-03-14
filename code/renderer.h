@@ -55,4 +55,9 @@ private:
 	static CRenderer *m_pRenderer;	// 自身のポインタ
 };
 
+namespace Renderer
+{
+LPDIRECT3DDEVICE9 GetDevice(void);
+}
+
 #endif

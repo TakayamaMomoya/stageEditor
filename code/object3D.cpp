@@ -14,6 +14,7 @@
 #include "texture.h"
 #include "debugproc.h"
 #include "camera.h"
+#include "lambert.h"
 
 //=====================================================
 // コンストラクタ
@@ -262,17 +263,8 @@ void CObject3D::Draw(void)
 		SetMtx();
 	}
 
-	//ワールドマトリックス設定
-	pDevice->SetTransform(D3DTS_WORLD,&m_mtxWorld);
-
 	//頂点バッファをデータストリームに設定
 	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_3D));
-
-	// シェーダー
-	IDirect3DVertexDeclaration9 *pDec = CRenderer::GetInstance()->GetDecVtxShader();
-	IDirect3DVertexShader9 *pVtxShader = CRenderer::GetInstance()->GetHandlerVtxShader();
-	pDevice->SetVertexDeclaration(pDec);
-	pDevice->SetVertexShader(pVtxShader);
 
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_3D);
@@ -287,11 +279,24 @@ void CObject3D::Draw(void)
 		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	}
 
-	IDirect3DPixelShader9 *ShaderPx = CRenderer::GetInstance()->GetHandlerPxShader();
-	pDevice->SetPixelShader(ShaderPx);
+	CLambert *pLambert = CLambert::GetInstance();
+
+	if (pLambert != nullptr)
+	{
+		pLambert->Begin();
+		pLambert->SetMatrix(&m_mtxWorld, &D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
+		pLambert->SetAmbient(0.2f);
+		pLambert->BeginPass();
+	}
 
 	// 描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,0,2);
+
+	if (pLambert != nullptr)
+	{
+		pLambert->End();
+		pLambert->EndPass();
+	}
 
 	if (m_mode == MODE_STRETCHBILLBOARD)
 	{

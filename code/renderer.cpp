@@ -157,119 +157,6 @@ HRESULT CRenderer::Init(HWND hWnd, BOOL bWindow)
 	// オブジェクトのリリース処理
 	CObject::ReleaseAll();
 
-	// 頂点シェーダーの頂点情報宣言
-	D3DVERTEXELEMENT9 vtxElem[] =
-	{
-		{// 座標
-			0, 0,
-			D3DDECLTYPE_FLOAT3,
-			D3DDECLMETHOD_DEFAULT,
-			D3DDECLUSAGE_POSITION,
-			0
-		},
-		{// 法線
-			0, 12,
-			D3DDECLTYPE_FLOAT3,
-			D3DDECLMETHOD_DEFAULT,
-			D3DDECLUSAGE_NORMAL,
-			0
-		},
-		{// 色
-			0, 24,
-			D3DDECLTYPE_D3DCOLOR,
-			D3DDECLMETHOD_DEFAULT,
-			D3DDECLUSAGE_COLOR,
-			0
-		},
-		{// テクスチャ座標
-			0, 28,
-			D3DDECLTYPE_FLOAT2,
-			D3DDECLMETHOD_DEFAULT,
-			D3DDECLUSAGE_TEXCOORD,
-			0
-		},
-
-		 D3DDECL_END()	// 終端宣言
-	};
-
-	m_pD3DDevice->CreateVertexDeclaration(vtxElem, &m_pDecVtx);
-
-	// 頂点シェーダー命令の定義
-	const char cCmdShader[] =
-		"vs_1_1 \n"
-		"dcl_position v0 \n"
-		"dcl_color    v1 \n"
-		"dcl_texcoord v2 \n"
-		"m4x4        oPos, v0, c0 \n"
-		"mov          oD0, v1 \n";
-
-	// 頂点シェーダーをコンパイル
-	ID3DXBuffer *pShader;	// シェーダー命令格納バッファ
-	ID3DXBuffer *pError;	// コンパイルエラー格納バッファ
-
-	HRESULT hr;
-	hr = D3DXAssembleShader(
-		cCmdShader,	// 命令配列のポインタ
-		sizeof(cCmdShader) - 1,	// 命令文字数
-		0,	// プリプロセッサ定義
-		NULL,	// インクルード命令
-		0,	// コンパイルオプション
-		&pShader,	// シェーダーバッファ
-		&pError	// エラーバッファ
-	);
-
-	if (FAILED(hr))
-	{
-		const char *pErrorMsg = static_cast<const char*>(pError->GetBufferPointer());
-
-		return 0;
-	}
-
-	// シェーダーハンドラーの生成
-	m_pHandlerVtxShader;
-
-	m_pD3DDevice->CreateVertexShader(
-		(DWORD*)pShader->GetBufferPointer(),
-		&m_pHandlerVtxShader
-	);
-
-
-	// ピクセルシェーダ命令定義
-	const char cCmdPxShader[] =
-		"ps_1_1 \n"
-		"def   c0,   0.2989f,   0.5866f,   0.1145f,   0.0f \n"  // 彩度算出係数
-		"tex   t0                                          \n"  // テクスチャ
-		"dp3   r0,   t0,   c0                         \n"  // 彩度Y算出(r.aに格納される)
-		"mov   r1,   r0.a                                  \n"  // r0の各成分をYで埋める
-		"lrp   r0,   c1,   t0,   r1              \n"; // 線形補間( v0 + c1*(Y-v0) )
-
-	// ピクセルシェーダ命令コンパイル
-	ID3DXBuffer *pPxShader;	// シェーダ命令格納バッファ
-	ID3DXBuffer *pPxError;	// コンパイルエラー情報格納バッファ
-	hr = D3DXAssembleShader(
-		cCmdPxShader,
-		sizeof(cCmdPxShader) - 1,
-		0,
-		NULL,
-		0,
-		&pPxShader,
-		&pPxError
-	);
-
-	if (FAILED(hr))
-	{
-		const char *pErrorMsg = static_cast<const char*>(pPxError->GetBufferPointer());
-
-		return 0;
-	}
-
-	// ピクセルシェーダハンドラの生成
-	m_pHandlerPxShader;
-	m_pD3DDevice->CreatePixelShader(
-		(DWORD*)pPxShader->GetBufferPointer(),
-		&m_pHandlerPxShader
-	);
-
 	return S_OK;
 }
 
@@ -347,10 +234,6 @@ void CRenderer::Draw(void)
 		// FPS表示
 		DrawFPS();
 
-		// シェーダー
-		m_pD3DDevice->SetVertexDeclaration(m_pDecVtx);
-		m_pD3DDevice->SetVertexShader(m_pHandlerVtxShader);
-
 		// オブジェクトの描画
 		CObject::DrawAll();
 
@@ -383,4 +266,24 @@ void CRenderer::DrawFPS(void)
 	CDebugProc::GetInstance()->Print("FPS:%d\n", GetFPS());
 	CDebugProc::GetInstance()->Print("オブジェクト総数:[%d]\n", CObject::GetNumAll());
 	CDebugProc::GetInstance()->Print("敵総数:[%d]\n", CEnemy::GetNumAll());
+}
+
+namespace Renderer
+{
+LPDIRECT3DDEVICE9 GetDevice(void)
+{
+	CRenderer *pRenderer = CRenderer::GetInstance();
+	LPDIRECT3DDEVICE9 pDevice = nullptr;
+
+	if (pRenderer != nullptr)
+	{
+		pDevice = pRenderer->GetDevice();
+	}
+	else
+	{
+		assert(("デバイスの取得に失敗",false));
+	}
+
+	return pDevice;
+}
 }

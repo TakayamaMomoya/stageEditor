@@ -134,14 +134,29 @@ void CEdit::Update(void)
 
 	if (m_pObjectCursor != nullptr && pKeyboard != nullptr && pMouse != nullptr && pBlockManager != nullptr)
 	{
-		// ブロック移動
-		ImGui::DragFloat("POS.X", &m_pos.x, SPEED_MOVE, -FLT_MAX, FLT_MAX);
-		ImGui::DragFloat("POS.Y", &m_pos.y, SPEED_MOVE, -FLT_MAX, FLT_MAX);
-		ImGui::DragFloat("POS.Z", &m_pos.z, SPEED_MOVE, -FLT_MAX, FLT_MAX);
+		if (ImGui::TreeNode("POS"))
+		{
+			// ブロック移動
+			ImGui::DragFloat("POS.X", &m_pos.x, SPEED_MOVE, -FLT_MAX, FLT_MAX);
+			ImGui::DragFloat("POS.Y", &m_pos.y, SPEED_MOVE, -FLT_MAX, FLT_MAX);
+			ImGui::DragFloat("POS.Z", &m_pos.z, SPEED_MOVE, -FLT_MAX, FLT_MAX);
+
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("ROT"))
+		{
+			// ブロック向き
+			ImGui::DragFloat("ROT.X", &m_rot.x, 0.01f, -D3DX_PI, D3DX_PI);
+			ImGui::DragFloat("ROT.Y", &m_rot.y, 0.01f, -D3DX_PI, D3DX_PI);
+			ImGui::DragFloat("ROT.Z", &m_rot.z, 0.01f, -D3DX_PI, D3DX_PI);
+
+			ImGui::TreePop();
+		}
 
 		int nNumBlock = pBlockManager->GetNumBlock();
 		CBlockManager::SInfoBlock *pInfoBlock = pBlockManager->GetInfoBlock();
-		
+
 		if (ImGui::TreeNode("SelectBlock"))
 		{
 			for (int i = 0; i < nNumBlock; i++)
@@ -171,7 +186,7 @@ void CEdit::Update(void)
 		}
 
 		ImGui::InputText("SavePath", &m_aPath[0], 256);
-		
+
 		if (ImGui::Button("Save", ImVec2(50.0f, 20.0f)))
 		{// 保存
 			CBlockManager *pBlockManager = CBlockManager::GetInstance();
@@ -209,22 +224,8 @@ void CEdit::Update(void)
 		if (m_pObjectCursor != nullptr)
 		{// カーソルのトランスフォーム
 			m_pObjectCursor->SetPosition(m_pos);
+			m_pObjectCursor->SetRot(m_rot);
 		}
-
-		CDebugProc::GetInstance()->Print("\n//=======================\n");
-		CDebugProc::GetInstance()->Print("// エディター\n");
-		CDebugProc::GetInstance()->Print("//=======================\n");
-		CDebugProc::GetInstance()->Print("エディターの位置：[%f,%f,%f]\n", m_pObjectCursor->GetPosition().x, m_pObjectCursor->GetPosition().y, m_pObjectCursor->GetPosition().z);
-		CDebugProc::GetInstance()->Print("エディターの向き：[%f,%f,%f]\n", m_pObjectCursor->GetRot().x, m_pObjectCursor->GetRot().y, m_pObjectCursor->GetRot().z);
-		CDebugProc::GetInstance()->Print("移動[WASD]\n");
-		CDebugProc::GetInstance()->Print("上下移動[QE]\n");
-		CDebugProc::GetInstance()->Print("回転[ZC]\n");
-		CDebugProc::GetInstance()->Print("設置[ENTER]\n");
-		CDebugProc::GetInstance()->Print("保存[F2]\n");
-		CDebugProc::GetInstance()->Print("選択中のブロック：[%d]\n", m_nIdxObject);
-		CDebugProc::GetInstance()->Print("選択ブロック削除[BACK SPACE]\n");
-		CDebugProc::GetInstance()->Print("設置するタイプ：[%d]:[1,2]\n", m_type);
-		CDebugProc::GetInstance()->Print("//=======================\n");
 	}
 }
 

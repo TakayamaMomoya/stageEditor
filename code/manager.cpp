@@ -27,6 +27,7 @@
 #include "fade.h"
 #include "inputManager.h"
 #include "block.h"
+#include "lambert.h"
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -61,6 +62,8 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 {
 	// レンダラーの生成
 	CRenderer::Create(hWnd, bWindow);
+
+	CLambert::Create();
 
 	// 入力マネージャー生成
 	CInputManager::Create(hInstance, hWnd);
@@ -121,6 +124,13 @@ void CManager::Uninit(void)
 	if (m_pScene != nullptr)
 	{
 		m_pScene->Uninit();
+	}
+
+	CLambert *pLambert = CLambert::GetInstance();
+
+	if (pLambert != nullptr)
+	{
+		pLambert->Uninit();
 	}
 
 	// フェード終了
